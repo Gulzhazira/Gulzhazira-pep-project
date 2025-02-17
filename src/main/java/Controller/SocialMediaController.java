@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.List;
+
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
  * found in readme.md as well as the test cases. You should
@@ -21,8 +23,8 @@ public class SocialMediaController {
     MessageService messageService;
 
     public SocialMediaController(){
-        this.accountService = accountService;
-        this.messageService = messageService;
+        this.accountService = new AccountService();
+        this.messageService = new MessageService();
     }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -32,7 +34,7 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::postRegisterHandler);
-        //app.post("/login", this::postLoginHandler);
+        app.post("/login", this::postLoginHandler);
         /*app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageById);
@@ -61,19 +63,19 @@ public class SocialMediaController {
         }
     }
 
-    /*private void postLoginHandler(Context context) throws JsonProcessingException{
+    private void postLoginHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
-        Account showedLogin = accountService.showLogin(account);
+        Account logedInAccount = accountService.login(account);
 
-        if(showedLogin != null){
-            context.json(mapper.writeValueAsString(showedLogin));
+        if(logedInAccount != null){
+            context.json(accountService.login(account));
             context.status(200);
         } else {
             context.status(401);
         }
 
-    }*/
+    }
 
 
 }
