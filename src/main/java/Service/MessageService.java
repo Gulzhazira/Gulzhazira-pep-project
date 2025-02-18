@@ -4,7 +4,7 @@ import Model.Message;
 import DAO.MessageDAO;
 import DAO.AccountDAO;
 
-//import java.util.List;
+import java.util.List;
 
 public class MessageService {
     private MessageDAO messageDAO;
@@ -27,8 +27,15 @@ public class MessageService {
         if (accountDAO.getAccountByID(message.getPosted_by()) == null) {
             return null;
         }
-        messageDAO.insertMessage(message);
-        return message;
+        return messageDAO.insertMessage(message);
+        //return message;
     }
     
+    public List<Message> getAllMessages() {
+        return messageDAO.getAllMessages();
+    }
+
+    public Message getMessageById(int message_id) {
+        return messageDAO.getMessageById(message_id);
+    }
 }

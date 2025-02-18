@@ -36,8 +36,8 @@ public class SocialMediaController {
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postMessageHandler);
-        //app.get("/messages", this::getAllMessagesHandler);
-        //app.get("/messages/{message_id}", this::getMessageById);
+        app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageById);
         //app.delete("/messages/{message_id}", this::deleteMessageById);
         //app.patch("/messages/{message_id}", this::updateMessageById);
         //app.get("/accounts/{account_id}/messages", getMessagesByAccount);
@@ -82,7 +82,7 @@ public class SocialMediaController {
         Message submittedMessage = messageService.submitMessage(message);
 
         if(submittedMessage != null) {
-            context.json(messageService.submitMessage(message));
+            context.json(submittedMessage);
             context.status(200);
         } else {
             context.status(400);
@@ -90,5 +90,18 @@ public class SocialMediaController {
 
     }
 
+    private void getAllMessagesHandler (Context context) {
+        List<Message> messages = messageService.getAllMessages();
+        context.json(messages);
+        context.status(200);
+    }
 
+    private void getMessageById (Context context) {
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        Message message = messageService.getMessageById(messageId);
+        if(message == null) {
+            context.json(new Message()).status(200);
+        } 
+        context.json(message).status(200);
+    }
 }
