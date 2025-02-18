@@ -35,13 +35,12 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
-        /*app.post("/messages", this::postMessageHandler);
-        app.get("/messages", this::getAllMessagesHandler);
-        app.get("/messages/{message_id}", this::getMessageById);
-        app.delete("/messages/{message_id}", this::deleteMessageById);
-        app.patch("/messages/{message_id}", this::updateMessageById);
-        app.get("/accounts/{account_id}/messages", getMessagesByAccount);*/
-        //app.start(8080);
+        app.post("/messages", this::postMessageHandler);
+        //app.get("/messages", this::getAllMessagesHandler);
+        //app.get("/messages/{message_id}", this::getMessageById);
+        //app.delete("/messages/{message_id}", this::deleteMessageById);
+        //app.patch("/messages/{message_id}", this::updateMessageById);
+        //app.get("/accounts/{account_id}/messages", getMessagesByAccount);
 
         return app;
     }
@@ -73,6 +72,20 @@ public class SocialMediaController {
             context.status(200);
         } else {
             context.status(401);
+        }
+
+    }
+
+    private void postMessageHandler (Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+        Message submittedMessage = messageService.submitMessage(message);
+
+        if(submittedMessage != null) {
+            context.json(messageService.submitMessage(message));
+            context.status(200);
+        } else {
+            context.status(400);
         }
 
     }
