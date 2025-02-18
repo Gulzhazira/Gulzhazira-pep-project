@@ -36,6 +36,40 @@ public class MessageService {
     }
 
     public Message getMessageById(int message_id) {
+        /*if(messageDAO.getMessageById(message_id) == null) {
+            return null;
+        }*/
         return messageDAO.getMessageById(message_id);
+    }
+
+   /*public Message deleteMessage (int message_id, Message message) {
+        if(messageDAO.getMessageById(message_id) == null) {
+            return null;
+        } else {
+            messageDAO.deleteMessage(message_id, message);
+            return message;
+        }
+    }
+
+    public Message updateMessage (int message_id, Message message) {
+        if(messageDAO.getMessageById(message_id) == null) {
+            return null;
+        } 
+        if(message.getMessage_text().length() >255 || message.getMessage_text() == null) {
+            return null;
+        }
+        messageDAO.updateMessage(message_id, message);
+        return message;
+    }*/
+
+    public Message deleteMessageById(int messageId) {
+        return messageDAO.deleteMessageById(messageId);
+    }
+
+    public Message updateMessageText(int messageId, String newMessageText) {
+        if (newMessageText == null || newMessageText.isBlank() || newMessageText.length() > 255) {
+            return null; 
+        }
+        return messageDAO.updateMessageText(messageId, newMessageText);
     }
 }
