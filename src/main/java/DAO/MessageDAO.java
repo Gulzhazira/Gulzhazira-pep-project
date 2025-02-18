@@ -4,7 +4,6 @@ import Model.Message;
 import Util.ConnectionUtil;
 
 import java.sql.*;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -145,5 +144,29 @@ public class MessageDAO {
         }
     
         return null;
+    }
+
+    public List<Message> getMessageByUser (int posted_by) {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM Message WHERE posted_by = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, posted_by);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Message message = new Message(rs.getInt("message_id"), 
+                                            rs.getInt("posted_by"),
+                                            rs.getString("message_text"), 
+                                            rs.getLong("time_posted_epoch"));
+                messages.add(message);
+            }
+
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messages;
     }
 }
